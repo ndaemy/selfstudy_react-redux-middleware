@@ -5,18 +5,25 @@ import { getPost, getUsers } from '../modules/sample';
 
 const SampleContainer = () => {
   const { post, users, loadingPost, loadingUsers } = useSelector(
-    ({ sample }) => ({
+    ({ sample, loading }) => ({
       post: sample.post,
       users: sample.users,
-      loadingPost: sample.loading.GET_POST,
-      loadingUsers: sample.loading.GET_USERS,
+      loadingPost: loading['sample/GET_POST'],
+      loadingUsers: loading['sample/GET_USERS'],
     }),
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getPost(1));
-    dispatch(getUsers(1));
+    const fn = async () => {
+      try {
+        await dispatch(getPost(1));
+        await dispatch(getUsers(1));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fn();
   }, [dispatch]);
 
   return (
